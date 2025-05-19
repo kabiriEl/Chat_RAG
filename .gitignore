@@ -1,0 +1,22 @@
+# Fichiers à ignorer par Git
+__pycache__/
+.env
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+
+# Environnements virtuels
+venv/
+env/
+ENV/
+chat_RAG/
+
+
+# Dossiers système
+.DS_Store
+Thumbs.db
+
+# Dossiers de vectorisation
+vector_store/

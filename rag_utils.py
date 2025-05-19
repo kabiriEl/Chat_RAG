@@ -1,0 +1,66 @@
+import os
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
+from PyPDF2 import PdfReader
+import faiss
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.docstore.document import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import google.generativeai as genai
+
+# Charger les variables d'environnement
+load_dotenv()
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # depuis ton .env
+genai.configure(api_key=GOOGLE_API_KEY)
+
+EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+DATA_DIR = "data"
+VECTOR_DIR = "vector_store"
+
+def load_documents():
+    docs = []
+    for filename in os.listdir(DATA_DIR):
+        if filename.endswith(".pdf"):
+            path = os.path.join(DATA_DIR, filename)
+            reader = PdfReader(path)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text() or ""
+            docs.append(text)
+    return docs
+
+def chunk_documents(texts):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    docs = []
+    for text in texts:
+        chunks = splitter.create_documents([text])
+        docs.extend(chunks)
+    return docs
+
+def create_vector_store(docs):
+    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    db = FAISS.from_documents(docs, embeddings)
+    db.save_local(VECTOR_DIR)
+    return db
+
+def load_vector_store():
+    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    db = FAISS.load_local(VECTOR_DIR, embeddings, allow_dangerous_deserialization=True)
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 4})
+    return db, retriever
+
+def generate_response(prompt):
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"Erreur Gemini API : {e}"
+
+def get_answer(query, retriever):
+    docs = retriever.get_relevant_documents(query)
+    context = "\n\n".join([doc.page_content for doc in docs])
+    prompt = f"Contexte:\n{context}\n\nQuestion: {query}\nRéponse:"
+    return generate_response(prompt)

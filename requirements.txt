@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+faiss-cpu
+transformers
+sentence-transformers
+python-dotenv
+requests
+PyPDF2
+langchain
