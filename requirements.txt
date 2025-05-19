@@ -8,3 +8,4 @@ requests
 PyPDF2
 langchain
 langchain-community
+google-generativeai
