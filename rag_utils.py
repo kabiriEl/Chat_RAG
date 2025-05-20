@@ -60,8 +60,31 @@ def generate_response(prompt):
     except Exception as e:
         return f"Erreur Gemini API : {e}"
 
+# def get_answer(query, retriever):
+#     docs = retriever.get_relevant_documents(query)
+#     context = "\n\n".join([doc.page_content for doc in docs])
+#     prompt = f"Contexte:\n{context}\n\nQuestion: {query}\nRéponse:"
+#     return generate_response(prompt)
+
 def get_answer(query, retriever):
     docs = retriever.get_relevant_documents(query)
     context = "\n\n".join([doc.page_content for doc in docs])
-    prompt = f"Contexte:\n{context}\n\nQuestion: {query}\nRéponse:"
+
+    instruction = (
+        "Tu es Felah, un assistant agricole expert et amical.\n"
+        "Commence chaque réponse par une formule de politesse comme 'Bonjour' ou 'Avec plaisir'.\n"
+        "Fais un retour à la ligne avant de répondre à la question.\n"
+        "Utilise un langage simple, compréhensible pour un agriculteur.\n"
+        "Sois clair, structuré, sans jargon technique inutile.\n"
+        "Si tu ne sais pas répondre précisément, dis-le honnêtement.\n"
+        "À la fin, invite toujours l'agriculteur à poser une autre question."
+    )
+
+    prompt = (
+        f"{instruction}\n\n"
+        f"Contexte :\n{context}\n\n"
+        f"Question : {query}\n"
+        f"Réponse :"
+    )
+
     return generate_response(prompt)
