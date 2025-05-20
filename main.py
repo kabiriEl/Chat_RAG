@@ -1,10 +1,13 @@
+import os
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from rag_utils import load_vector_store , get_answer
 import uvicorn
 
+
+
 app = FastAPI()
-#lkjhgfdfghjk
+
 # Charger l'index FAISS + le modèle d'embedding au démarrage
 vector_store, retriever = load_vector_store()
 
@@ -16,7 +19,14 @@ async def ask_question(q: Question):
     response = get_answer(q.query, retriever)
     return {"answer": response}
 
-#testlkjhjkljjjjj
-#teste
+
+
+
+
 # if __name__ == "__main__":
-#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+#     uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Utilise le port imposé par Render
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
