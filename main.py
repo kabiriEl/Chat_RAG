@@ -16,7 +16,7 @@ async def ask_question(q: Question):
     response = get_answer(q.query, retriever)
     return {"answer": response}
 
-#test
+#testlkjhjkl
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
