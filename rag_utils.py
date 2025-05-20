@@ -80,6 +80,7 @@ def get_answer(query, retriever):
     "Fais un retour à la ligne avant de répondre à la question.\n"
     "Si l'utilisateur te dit seulement 'bonjour', 'merci', ou te salue, réponds simplement avec une courte formule polie adaptée (ex : 'Bonjour ! Comment puis-je vous aider ?').\n"
     "Si l'utilisateur pose une vraie question, donne une réponse structurée, simple et pédagogique.\n"
+    "il faut dire bonjour à chaque fois tu répond , seulement une fois au début de discussion , et après utilise d'autre formule de politesse"
     "Ne donne jamais de réponses inutiles ou trop longues pour des messages courts.\n"
     "Sois clair, structuré, sans jargon technique inutile.\n"
     "Si tu ne sais pas répondre précisément, dis-le honnêtement.\n"
