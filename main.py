@@ -4,7 +4,7 @@ from rag_utils import load_vector_store , get_answer
 import uvicorn
 
 app = FastAPI()
-
+#lkjhgfdfghjk
 # Charger l'index FAISS + le modèle d'embedding au démarrage
 vector_store, retriever = load_vector_store()
 
