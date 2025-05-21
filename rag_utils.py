@@ -4,8 +4,9 @@ from sentence_transformers import SentenceTransformer
 from PyPDF2 import PdfReader
 import faiss
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
-from langchain.embeddings import HuggingFaceEmbeddings
+
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import google.generativeai as genai
